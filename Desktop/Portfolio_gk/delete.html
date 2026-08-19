@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Gaurav Kulkarni | Portfolio '26</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Inter:wght@300;400;500;600;700&family=Manrope:wght@200;300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GSAP & HLS.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        body: ['Inter', 'sans-serif'],
+                        display: ['Instrument Serif', 'serif'],
+                    },
+                    colors: {
+                        bg: 'hsl(0, 0%, 4%)',
+                        surface: 'hsl(0, 0%, 8%)',
+                        'text-primary': 'hsl(0, 0%, 96%)',
+                        muted: 'hsl(0, 0%, 53%)',
+                        stroke: 'hsl(0, 0%, 12%)',
+                        accent: 'hsl(0, 0%, 96%)',
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+
+        body {
+            background-color: hsl(0, 0%, 4%);
+            color: hsl(0, 0%, 96%);
+            overflow-x: hidden;
+        }
+
+        /* Custom Gradients & Overlays */
+        .accent-gradient {
+            background: linear-gradient(90deg, #89AACC 0%, #4E85BF 100%);
+        }
+
+        .accent-gradient-border {
+            position: relative;
+        }
+
+        .accent-gradient-border::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #89AACC, #4E85BF, #89AACC);
+            background-size: 200% auto;
+            z-index: -1;
+            animation: gradient-shift 6s ease infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .accent-gradient-border:hover::before {
+            opacity: 1;
+        }
+
+        .halftone-overlay {
+            background-image: radial-gradient(circle, #000 1px, transparent 1px);
+            background-size: 4px 4px;
+            mix-blend-mode: multiply;
+            opacity: 0.2;
+        }
+
+        /* Animations */
+        @keyframes scroll-down {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(200%);
+            }
+        }
+
+        .animate-scroll-down {
+            animation: scroll-down 1.5s ease-in-out infinite;
+        }
+
+        @keyframes role-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-role {
+            animation: role-fade-in 0.4s ease-out forwards;
+        }
+
+        @keyframes gradient-shift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* ==========================================================================
+       "NEXT LAYER" SECTION CSS (Strictly Scoped viewport calculations)
+       ========================================================================== */
+        .nl-stage {
+            --ink: #fafafa;
+            --muted: #a7a6a6;
+            --strip: #8b8a8a;
+            --pill: #ffffff;
+            --pill-ink: #050505;
+
+            --u: calc(100vh / 1058);
+            --uw: calc(100vw / 1487);
+            --h: clamp(var(--u), calc(var(--u) * .65 + var(--uw) * .35), calc(var(--u) * 1.16));
+
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: #050505;
+            font-family: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            text-rendering: geometricPrecision;
+        }
+
+        @supports (height: 100dvh) {
+            .nl-stage {
+                --u: calc(100dvh / 1058);
+                height: 100dvh;
+            }
+        }
+
+        .nl-plate {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .nl-plate-video {
+            position: absolute;
+            left: 50%;
+            top: calc(1 * var(--u));
+            width: calc(1492 * var(--u));
+            height: calc(1054 * var(--u));
+            transform: translateX(calc(-50% - calc(0.5 * var(--u))));
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        .nl-plate::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to bottom, rgba(5, 5, 5, 0) 78.8%, rgba(5, 5, 5, .23) 79.6%, rgba(5, 5, 5, .45) 81.4%, rgba(5, 5, 5, .75) 83.3%, rgba(5, 5, 5, .84) 85.2%, rgba(5, 5, 5, .888) 88%, rgba(5, 5, 5, .905) 91%, rgba(5, 5, 5, .96) 95%, #050505 100%),
+                linear-gradient(to right, #050505 calc(50% - calc(746 * var(--u))), transparent calc(50% - calc(676 * var(--u))), transparent calc(50% + calc(676 * var(--u))), #050505 calc(50% + calc(746 * var(--u))));
+        }
+
+        .nl-hero {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .nl-hero>* {
+            pointer-events: auto;
+        }
+
+        .nl-headline {
+            position: absolute;
+            left: calc(75.5 * var(--u));
+            top: calc(230.5 * var(--u));
+            font-size: calc(71.6 * var(--h));
+            line-height: calc(80.5 * var(--h));
+            font-weight: 400;
+            letter-spacing: calc(0.3 * var(--h));
+            color: var(--ink);
+            white-space: nowrap;
+            margin: 0;
+        }
+
+        .nl-headline span {
+            display: block;
+        }
+
+        .nl-sub {
+            position: absolute;
+            left: calc(75.5 * var(--u));
+            top: calc(calc(230.5 * var(--u)) + calc(189.0 * var(--h)));
+            font-size: calc(20.7 * var(--h));
+            line-height: calc(23.5 * var(--h));
+            font-weight: 400;
+            word-spacing: calc(1.8 * var(--h));
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .nl-sub span {
+            display: block;
+        }
+
+        .nl-pill-cta {
+            position: absolute;
+            left: calc(74.9 * var(--u));
+            top: calc(calc(230.5 * var(--u)) + calc(264.5 * var(--h)));
+            width: calc(175.6 * var(--h));
+            height: calc(50 * var(--h));
+            background: var(--pill);
+            color: var(--pill-ink);
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(20.6 * var(--h));
+            font-weight: 500;
+            transition: opacity 0.2s;
+        }
+
+        .nl-pill-cta span {
+            transform: translateY(calc(1 * var(--h)));
+        }
+
+        .nl-pill-cta:hover {
+            opacity: 0.9;
+        }
+
+        .nl-ghost {
+            position: absolute;
+            left: calc(calc(74.9 * var(--u)) + calc(220.6 * var(--h)));
+            top: calc(calc(230.5 * var(--u)) + calc(279.5 * var(--h)));
+            font-size: calc(20.6 * var(--h));
+            font-weight: 500;
+            letter-spacing: calc(0.12 * var(--h));
+            color: #ffffff;
+            transition: color 0.2s;
+        }
+
+        .nl-ghost:hover {
+            color: var(--muted);
+        }
+
+        .nl-logos {
+            position: absolute;
+            width: calc(741 * var(--u));
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            transform: translateX(calc(-50% + calc(20 * var(--u))));
+            color: var(--strip);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .nl-logos .nl-lg {
+            position: absolute;
+            display: flex;
+            align-items: center;
+        }
+
+        .nl-logos .nl-lg svg {
+            fill: currentColor;
+        }
+
+        .nl-logos .nl-lg .nl-word {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 700;
+            position: absolute;
+        }
+
+        .nl-lg1 {
+            left: calc(-0.5 * var(--u));
+            top: calc(994.7 * var(--u));
+        }
+
+        .nl-lg1 svg {
+            width: calc(30.5 * var(--u));
+            height: calc(31 * var(--u));
+        }
+
+        .nl-lg1 .nl-word {
+            left: calc(37 * var(--u));
+            top: calc(5.6 * var(--u));
+            font-size: calc(18.1 * var(--u));
+        }
+
+        .nl-lg2 {
+            left: calc(206.5 * var(--u));
+            top: calc(995.7 * var(--u));
+        }
+
+        .nl-lg2 svg {
+            width: calc(24.5 * var(--u));
+            height: calc(30 * var(--u));
+        }
+
+        .nl-lg2 .nl-word {
+            left: calc(31 * var(--u));
+            top: calc(7.3 * var(--u));
+            font-size: calc(18.5 * var(--u));
+        }
+
+        .nl-lg3 {
+            left: calc(416.5 * var(--u));
+            top: calc(996.7 * var(--u));
+        }
+
+        .nl-lg3 svg {
+            width: calc(28.5 * var(--u));
+            height: calc(28 * var(--u));
+        }
+
+        .nl-lg3 .nl-word {
+            left: calc(35 * var(--u));
+            top: calc(7.3 * var(--u));
+            font-size: calc(16.15 * var(--u));
+        }
+
+        .nl-lg4 {
+            left: calc(620.5 * var(--u));
+            top: calc(998.7 * var(--u));
+        }
+
+        .nl-lg4 svg {
+            width: calc(28.5 * var(--u));
+            height: calc(25.5 * var(--u));
+        }
+
+        .nl-lg4 .nl-word {
+            left: calc(37 * var(--u));
+            top: calc(8.3 * var(--u));
+            font-size: calc(15.3 * var(--u));
+        }
+
+        /* The Fix: explicitly declare the 'to' state so opacity finishes at 1 */
+        @keyframes nlRise {
+            from {
+                opacity: 0;
+                transform: translateY(calc(14 * var(--u)));
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes nlFade {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Scroll triggered animations base states */
+        .nl-stage .nl-headline,
+        .nl-stage .nl-sub,
+        .nl-stage .nl-pill-cta,
+        .nl-stage .nl-ghost,
+        .nl-stage .nl-lg {
+            opacity: 0;
+        }
+
+        /* Fallback in case JS triggers but animations fail */
+        .nl-stage.in-view .nl-headline,
+        .nl-stage.in-view .nl-sub,
+        .nl-stage.in-view .nl-pill-cta,
+        .nl-stage.in-view .nl-ghost,
+        .nl-stage.in-view .nl-lg {
+            opacity: 1;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .nl-stage.in-view .nl-headline {
+                animation: nlRise 0.9s cubic-bezier(.22, 1, .36, 1) both 0.06s;
+            }
+
+            .nl-stage.in-view .nl-sub {
+                animation: nlRise 0.9s cubic-bezier(.22, 1, .36, 1) both 0.14s;
+            }
+
+            .nl-stage.in-view .nl-pill-cta,
+            .nl-stage.in-view .nl-ghost {
+                animation: nlRise 0.9s cubic-bezier(.22, 1, .36, 1) both 0.22s;
+            }
+
+            .nl-stage.in-view .nl-lg {
+                animation: nlFade 1.1s ease both 0.34s;
+            }
+        }
+
+        /* Mobile Flow for NL Section */
+        @media (max-aspect-ratio: 11/10) {
+            .nl-stage {
+                --m: min(100vw / 430, 1.34px);
+                --u: var(--m);
+                display: flex;
+                flex-direction: column;
+                padding: calc(32 * var(--m));
+            }
+
+            @media (min-width: 600px) {
+                .nl-stage {
+                    --m: min(100vw / 860, 100vh / 760, 1.25px);
+                    --u: var(--m);
+                }
+            }
+
+            .nl-plate-video {
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                transform: none;
+                left: 0;
+                top: 0;
+                object-fit: cover;
+                object-position: 43% center;
+            }
+
+            .nl-plate::after {
+                background: linear-gradient(to right, rgba(5, 5, 5, .86) 0%, rgba(5, 5, 5, .66) 42%, rgba(5, 5, 5, .20) 78%, rgba(5, 5, 5, .10) 100%), linear-gradient(to bottom, rgba(5, 5, 5, .72) 0%, rgba(5, 5, 5, .34) 24%, rgba(5, 5, 5, .34) 56%, rgba(5, 5, 5, .80) 82%, rgba(5, 5, 5, .97) 94%, #050505 100%);
+            }
+
+            .nl-hero {
+                position: relative;
+                inset: auto;
+                display: flex;
+                flex-direction: column;
+                margin-top: calc(140 * var(--m));
+                z-index: 10;
+            }
+
+            .nl-headline {
+                position: relative;
+                left: 0;
+                top: 0;
+                font-size: calc(48 * var(--m));
+                line-height: 1.1;
+                white-space: normal;
+            }
+
+            .nl-headline span {
+                display: inline;
+            }
+
+            .nl-sub {
+                position: relative;
+                left: 0;
+                top: 0;
+                margin-top: calc(24 * var(--m));
+                font-size: calc(16 * var(--m));
+                line-height: 1.4;
+                white-space: normal;
+            }
+
+            .nl-sub span {
+                display: inline;
+            }
+
+            .nl-actions {
+                position: relative;
+                left: 0;
+                top: 0;
+                margin-top: calc(40 * var(--m));
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: calc(20 * var(--m));
+                pointer-events: auto;
+            }
+
+            .nl-pill-cta,
+            .nl-ghost {
+                position: relative;
+                left: 0;
+                top: 0;
+            }
+
+            .nl-pill-cta {
+                width: calc(160 * var(--m));
+                height: calc(50 * var(--m));
+                font-size: calc(18 * var(--m));
+            }
+
+            .nl-ghost {
+                font-size: calc(18 * var(--m));
+            }
+
+            .nl-logos {
+                position: relative;
+                left: 0;
+                top: 0;
+                transform: none;
+                width: 100%;
+                margin-top: auto;
+                padding-top: calc(60 * var(--m));
+                height: auto;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: calc(30 * var(--m));
+                z-index: 10;
+            }
+
+            .nl-logos .nl-lg {
+                position: relative;
+                left: 0 !important;
+                top: 0 !important;
+                transform: none;
+            }
+
+            .nl-logos .nl-lg svg {
+                width: calc(28 * var(--m)) !important;
+                height: auto !important;
+            }
+
+            .nl-logos .nl-lg .nl-word {
+                font-size: calc(16 * var(--m)) !important;
+                left: calc(36 * var(--m)) !important;
+                top: 50% !important;
+                transform: translateY(-50%) !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-body antialiased selection:bg-white selection:text-black">
+
+    <!-- ==================== SECTION 1: LOADING SCREEN ==================== -->
+    <div id="loading-screen"
+        class="fixed inset-0 z-[9999] bg-bg flex flex-col justify-between p-8 transition-transform duration-700 ease-in-out">
+        <div id="load-label" class="text-xs text-muted uppercase tracking-[0.3em] opacity-0 -translate-y-5">Portfolio
+            '26</div>
+        <div class="flex-1 flex items-center justify-center relative overflow-hidden h-32">
+            <div id="load-word"
+                class="absolute text-4xl md:text-6xl lg:text-7xl font-display italic text-text-primary/80 transition-all duration-300">
+                Design</div>
+        </div>
+        <div class="flex justify-end items-end pb-8">
+            <div id="load-counter" class="text-6xl md:text-8xl lg:text-9xl font-display text-text-primary tabular-nums">
+                000</div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-[3px] bg-stroke/50">
+            <div id="load-bar" class="h-full w-0 accent-gradient shadow-[0_0_8px_rgba(137,170,204,0.35)] origin-left">
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== GLOBAL NAVBAR ==================== -->
+    <nav class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 md:pt-6 px-4 pointer-events-none">
+        <div class="inline-flex items-center rounded-full backdrop-blur-md border border-white/10 bg-surface px-2 py-2 pointer-events-auto transition-shadow duration-300"
+            id="nav-pill">
+            <a href="#"
+                class="w-9 h-9 rounded-full accent-gradient p-[1.5px] group flex-shrink-0 transition-transform hover:scale-110">
+                <div class="w-full h-full bg-bg rounded-full flex items-center justify-center">
+                    <span class="font-display italic text-[13px] text-text-primary">GK</span>
+                </div>
+            </a>
+            <div class="w-px h-5 bg-stroke mx-1 hidden sm:block"></div>
+            <div class="flex items-center space-x-1">
+                <a href="#hero"
+                    class="text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-text-primary bg-stroke/50 transition-colors">Home</a>
+                <a href="#works"
+                    class="text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-muted hover:text-text-primary hover:bg-stroke/50 transition-colors">Work</a>
+                <a href="#explorations"
+                    class="text-xs sm:text-sm rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-muted hover:text-text-primary hover:bg-stroke/50 transition-colors">Playground</a>
+            </div>
+            <div class="w-px h-5 bg-stroke mx-1 hidden sm:block"></div>
+            <a href="#contact"
+                class="relative group rounded-full text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 text-text-primary accent-gradient-border bg-surface flex items-center gap-1">
+                Say hi <span>↗</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ==================== SECTION 2: HERO ==================== -->
+    <section id="hero" class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-bg">
+        <div class="absolute inset-0 z-0">
+            <video id="hero-video" autoPlay muted loop playsInline
+                class="absolute top-1/2 left-1/2 min-w-full min-h-full object-cover -translate-x-1/2 -translate-y-1/2"></video>
+            <div class="absolute inset-0 bg-black/40"></div>
+            <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-bg to-transparent"></div>
+        </div>
+        <div class="relative z-10 flex flex-col items-center text-center px-4 mt-12">
+            <div class="blur-in text-xs text-muted uppercase tracking-[0.3em] mb-8 opacity-0">COLLECTION '26</div>
+            <h1
+                class="name-reveal text-6xl md:text-8xl lg:text-9xl font-display italic leading-[0.9] tracking-tight text-text-primary mb-6 opacity-0 translate-y-12">
+                Gaurav Kulkarni</h1>
+            <div class="blur-in text-xl md:text-2xl text-text-primary mb-6 font-light opacity-0">
+                A <span id="role-text" class="font-display italic text-text-primary inline-block">Software
+                    Developer</span> lives in India.
+            </div>
+            <p class="blur-in text-sm md:text-base text-muted max-w-md mb-12 opacity-0">
+                Designing seamless digital interactions by focusing on the robust backend architectures and nuanced data
+                pipelines that bring systems to life.
+            </p>
+            <div class="blur-in flex items-center gap-4 opacity-0">
+                <a href="#works"
+                    class="rounded-full text-sm font-medium px-7 py-3.5 bg-text-primary text-bg hover:scale-105 transition-transform">See
+                    Works</a>
+                <a href="#contact"
+                    class="rounded-full text-sm font-medium px-7 py-3.5 border-2 border-stroke bg-bg text-text-primary accent-gradient-border hover:border-transparent hover:scale-105 transition-all">Reach
+                    out...</a>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center z-10">
+            <span class="text-[10px] text-muted uppercase tracking-[0.2em] mb-3">Scroll</span>
+            <div class="w-px h-10 bg-stroke relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full bg-white animate-scroll-down"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION 3: SELECTED WORKS ==================== -->
+    <section id="works" class="bg-bg py-16 md:py-24 px-6 md:px-10 lg:px-16 max-w-[1200px] mx-auto">
+        <div class="flex justify-between items-end mb-12 section-header">
+            <div>
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-8 h-px bg-stroke"></div><span
+                        class="text-xs text-muted uppercase tracking-[0.3em]">Selected Work</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-light text-text-primary">Featured <span
+                        class="font-display italic">projects</span></h2>
+                <p class="text-muted mt-4 max-w-sm">A selection of engineering projects, from distributed backend
+                    systems to full-stack platforms.</p>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-5 md:gap-6">
+            <!-- Card 1 -->
+            <div
+                class="group md:col-span-7 bg-surface border border-stroke rounded-3xl overflow-hidden relative aspect-[4/3] md:aspect-auto md:min-h-[400px] flex items-end p-6 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=1000&auto=format&fit=crop"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
+                    alt="Project">
+                <div class="absolute inset-0 halftone-overlay"></div>
+                <div
+                    class="absolute inset-0 bg-bg/70 opacity-0 group-hover:opacity-100 backdrop-blur-lg transition-all duration-500 flex items-center justify-center">
+                    <div
+                        class="bg-white text-black px-6 py-3 rounded-full text-sm font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                        View — <span class="font-display italic">Intelligence Evolve</span></div>
+                </div>
+            </div>
+            <!-- Card 2 -->
+            <div
+                class="group md:col-span-5 bg-surface border border-stroke rounded-3xl overflow-hidden relative aspect-[4/3] md:aspect-auto md:min-h-[400px] flex items-end p-6 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1541888087525-0728ccefa283?q=80&w=1000&auto=format&fit=crop"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
+                    alt="Project">
+                <div class="absolute inset-0 halftone-overlay"></div>
+                <div
+                    class="absolute inset-0 bg-bg/70 opacity-0 group-hover:opacity-100 backdrop-blur-lg transition-all duration-500 flex items-center justify-center">
+                    <div
+                        class="bg-white text-black px-6 py-3 rounded-full text-sm font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                        View — <span class="font-display italic">Climate Risk Engine</span></div>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div
+                class="group md:col-span-5 bg-surface border border-stroke rounded-3xl overflow-hidden relative aspect-[4/3] md:aspect-auto md:min-h-[400px] flex items-end p-6 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=1000&auto=format&fit=crop"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
+                    alt="Project">
+                <div class="absolute inset-0 halftone-overlay"></div>
+                <div
+                    class="absolute inset-0 bg-bg/70 opacity-0 group-hover:opacity-100 backdrop-blur-lg transition-all duration-500 flex items-center justify-center">
+                    <div
+                        class="bg-white text-black px-6 py-3 rounded-full text-sm font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                        View — <span class="font-display italic">FinCore / KAMBALA</span></div>
+                </div>
+            </div>
+            <!-- Card 4 -->
+            <div
+                class="group md:col-span-7 bg-surface border border-stroke rounded-3xl overflow-hidden relative aspect-[4/3] md:aspect-auto md:min-h-[400px] flex items-end p-6 cursor-pointer">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60"
+                    alt="Project">
+                <div class="absolute inset-0 halftone-overlay"></div>
+                <div
+                    class="absolute inset-0 bg-bg/70 opacity-0 group-hover:opacity-100 backdrop-blur-lg transition-all duration-500 flex items-center justify-center">
+                    <div
+                        class="bg-white text-black px-6 py-3 rounded-full text-sm font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                        View — <span class="font-display italic">TATA Retail Analytics</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION 4 & 5: JOURNAL / STATS ==================== -->
+    <section class="bg-bg py-16 md:py-24 px-6 md:px-10 lg:px-16 max-w-[1000px] mx-auto border-t border-stroke/50">
+        <div
+            class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center divide-y md:divide-y-0 md:divide-x divide-stroke">
+            <div class="pt-8 md:pt-0">
+                <div class="text-5xl font-display italic text-text-primary mb-2">9.78</div>
+                <div class="text-sm text-muted uppercase tracking-widest">Academic CGPA</div>
+            </div>
+            <div class="pt-8 md:pt-0">
+                <div class="text-5xl font-display italic text-text-primary mb-2">4+</div>
+                <div class="text-sm text-muted uppercase tracking-widest">Enterprise Projects</div>
+            </div>
+            <div class="pt-8 md:pt-0">
+                <div class="text-5xl font-display italic text-text-primary mb-2">100%</div>
+                <div class="text-sm text-muted uppercase tracking-widest">System Uptime</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION 6: EXPLORATIONS (PARALLAX + MODALS) ==================== -->
+    <section id="explorations" class="relative bg-bg min-h-[300vh]">
+        <div class="sticky top-0 h-screen flex flex-col items-center justify-center z-10 pointer-events-none">
+            <div class="text-center px-4">
+                <div class="text-xs text-muted uppercase tracking-[0.3em] mb-6">Explorations</div>
+                <h2 class="text-5xl md:text-7xl font-light text-text-primary mb-6">Visual <span
+                        class="font-display italic">playground</span></h2>
+                <p class="text-muted mb-8 max-w-sm mx-auto">Click any floating project to view technical architecture,
+                    GitHub repositories, and live demos.</p>
+            </div>
+        </div>
+        <div class="absolute inset-0 w-full h-full max-w-[1400px] mx-auto z-20 pointer-events-none overflow-hidden">
+            <!-- Left Column (3 Cards) -->
+            <div class="absolute top-[10%] left-[5%] md:left-[10%] flex flex-col gap-40 parallax-col-1">
+                <div onclick="openModal('iot')"
+                    class="group relative w-48 md:w-72 aspect-square rounded-3xl border border-stroke pointer-events-auto cursor-pointer overflow-hidden bg-surface shadow-2xl transition-transform hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80"
+                        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-30 transition-all duration-500"
+                        alt="IoT Radar">
+                    <div
+                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-medium">View IoT
+                            Radar</span>
+                    </div>
+                </div>
+                <div onclick="openModal('kambala')"
+                    class="group relative w-48 md:w-72 aspect-[4/5] rounded-3xl border border-stroke pointer-events-auto cursor-pointer overflow-hidden bg-surface shadow-2xl transition-transform hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=500&q=80"
+                        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-30 transition-all duration-500"
+                        alt="KAMBALA">
+                    <div
+                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-medium">View
+                            KAMBALA</span>
+                    </div>
+                </div>
+                <div onclick="openModal('scheduler')"
+                    class="group relative w-48 md:w-72 aspect-square rounded-3xl border border-stroke pointer-events-auto cursor-pointer overflow-hidden bg-surface shadow-2xl transition-transform hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=500&q=80"
+                        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-30 transition-all duration-500"
+                        alt="Scheduler">
+                    <div
+                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-medium">View
+                            Scheduler</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Right Column (2 Cards) -->
+            <div class="absolute top-[25%] right-[5%] md:right-[15%] flex flex-col gap-52 parallax-col-2">
+                <div onclick="openModal('reward')"
+                    class="group relative w-48 md:w-80 aspect-[4/5] rounded-3xl border border-stroke pointer-events-auto cursor-pointer overflow-hidden bg-surface shadow-2xl transition-transform hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&q=80"
+                        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-30 transition-all duration-500"
+                        alt="RewardSync">
+                    <div
+                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-medium">View
+                            RewardSync</span>
+                    </div>
+                </div>
+                <div onclick="openModal('tata')"
+                    class="group relative w-48 md:w-80 aspect-square rounded-3xl border border-stroke pointer-events-auto cursor-pointer overflow-hidden bg-surface shadow-2xl transition-transform hover:scale-105">
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80"
+                        class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-30 transition-all duration-500"
+                        alt="TATA Analytics">
+                    <div
+                        class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <span class="bg-white text-black px-5 py-2.5 rounded-full text-sm font-medium">View Retail
+                            Dashboard</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROJECT MODAL OVERLAY ==================== -->
+    <div id="project-modal"
+        class="fixed inset-0 z-[100000] hidden items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-xl cursor-pointer" onclick="closeModal()"></div>
+        <div id="modal-panel"
+            class="relative bg-surface border border-stroke p-6 md:p-8 rounded-[32px] max-w-3xl w-full mx-4 shadow-2xl transform scale-95 transition-all duration-300 flex flex-col gap-6">
+            <button onclick="closeModal()"
+                class="absolute top-6 right-6 text-muted hover:text-white transition-colors z-10 p-2 bg-black/40 rounded-full backdrop-blur-sm">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div class="w-full h-48 md:h-72 bg-bg rounded-2xl overflow-hidden relative border border-stroke">
+                <img id="modal-img" src="" class="w-full h-full object-cover" alt="Project Preview">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+            </div>
+            <div>
+                <div class="flex items-center gap-3 mb-2"><span id="modal-tag"
+                        class="text-xs font-mono uppercase tracking-widest text-muted border border-stroke px-3 py-1 rounded-full">Tag</span>
+                </div>
+                <h3 id="modal-title" class="text-3xl md:text-4xl font-light text-text-primary mb-4">Project <span
+                        class="font-display italic">Title</span></h3>
+                <p id="modal-desc" class="text-muted text-sm md:text-base leading-relaxed mb-8 max-w-2xl">Project
+                    description goes here...</p>
+                <div class="flex flex-wrap gap-4">
+                    <a id="modal-live" href="#" target="_blank"
+                        class="rounded-full text-sm font-medium px-7 py-3 bg-white text-black hover:scale-105 transition-transform flex items-center gap-2">Live
+                        Demo ↗</a>
+                    <a id="modal-repo" href="#" target="_blank"
+                        class="rounded-full text-sm font-medium px-7 py-3 border border-stroke bg-bg text-text-primary hover:bg-white/10 transition-colors flex items-center gap-2">GitHub
+                        Repo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 7: NEXT LAYER INFRASTRUCTURE (THE FINAL STAGE) ==================== -->
+    <!-- Note: We end the site strictly here. No footer beyond this point. -->
+    <section id="contact" class="nl-stage">
+        <div class="nl-plate">
+            <video class="nl-plate-video" autoplay muted loop playsinline preload="auto" aria-hidden="true">
+                <source
+                    src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260808_112712_da9d53df-6d27-4b12-bdf6-aa9dc2622bdf.mp4"
+                    type="video/mp4">
+            </video>
+        </div>
+
+        <div class="nl-hero">
+            <h1 class="nl-headline"><span>The Next Layer</span><span>of Intelligence</span></h1>
+            <p class="nl-sub"><span>A unified infrastructure platform to help teams build,</span><span>ship, and scale
+                    AI systems with confidence.</span></p>
+            <div class="nl-actions">
+                <a href="mailto:contact@gauravkulkarni.dev" class="nl-pill-cta"><span>Get Started</span></a>
+                <a href="https://github.com/yourusername" target="_blank" class="nl-ghost">View Architecture</a>
+            </div>
+        </div>
+
+        <div class="nl-logos">
+            <!-- lg1 -->
+            <div class="nl-lg nl-lg1">
+                <svg viewBox="0 0 30 31">
+                    <mask id="bite1">
+                        <rect width="30" height="31" fill="white" />
+                        <circle cx="19.5" cy="10.5" r="5.1" fill="black" />
+                    </mask>
+                    <circle cx="15" cy="15.5" r="14" mask="url(#bite1)" />
+                </svg>
+                <span class="nl-word">logoipsum</span>
+            </div>
+            <!-- lg2 -->
+            <div class="nl-lg nl-lg2">
+                <svg viewBox="0 0 25 30">
+                    <rect width="8" height="30" />
+                    <path d="M12 15 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" clip-path="inset(0 0 50% 0)" />
+                    <path d="M12 15 a8 8 0 1 0 16 0 a8 8 0 1 0 -16 0" fill="transparent" stroke="currentColor"
+                        stroke-width="4" clip-path="inset(50% 0 0 0)" />
+                </svg>
+                <span class="nl-word">logoipsum<span
+                        style="display:inline-block;width:0.09em;height:0.09em;background:currentColor;border-radius:50%;vertical-align:0.62em;margin-left:0.06em;"></span></span>
+            </div>
+            <!-- lg3 -->
+            <div class="nl-lg nl-lg3">
+                <svg viewBox="0 0 28 28">
+                    <circle cx="14" cy="14" r="12.35" fill="none" stroke="currentColor" stroke-width="3.1" />
+                    <path d="M6 14 Q10 4 18 8" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" />
+                    <path d="M22 14 Q18 24 10 20" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" />
+                </svg>
+                <span class="nl-word">logoipsum</span>
+            </div>
+            <!-- lg4 -->
+            <div class="nl-lg nl-lg4">
+                <svg viewBox="0 0 28 25.5">
+                    <path d="M0 12 Q7 2 14 12 T28 12 L28 25.5 L0 25.5 Z" />
+                    <path d="M0 16 Q7 6 14 16 T28 16" fill="none" stroke="#050505" stroke-width="3.05" />
+                    <path d="M0 21 Q7 11 14 21 T28 21" fill="none" stroke="#050505" stroke-width="3.05" />
+                </svg>
+                <span class="nl-word">logoipsum</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // Loading Screen
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.getElementById('loading-screen');
+            const counter = document.getElementById('load-counter');
+            const bar = document.getElementById('load-bar');
+            const words = ["Design", "Engineer", "Scale", "Architect"];
+            const wordEl = document.getElementById('load-word');
+
+            gsap.to("#load-label", { y: 0, opacity: 1, duration: 1, delay: 0.2 });
+
+            let wordIdx = 0;
+            const wordInterval = setInterval(() => {
+                wordIdx = (wordIdx + 1) % words.length;
+                wordEl.style.opacity = 0;
+                wordEl.style.transform = "translateY(-10px)";
+                setTimeout(() => {
+                    wordEl.innerText = words[wordIdx];
+                    wordEl.style.transform = "translateY(10px)";
+                    setTimeout(() => { wordEl.style.opacity = 1; wordEl.style.transform = "translateY(0)"; }, 50);
+                }, 300);
+            }, 900);
+
+            let count = 0;
+            const duration = 2700;
+            const start = performance.now();
+
+            function updateLoader(time) {
+                const elapsed = time - start;
+                count = Math.min(100, Math.floor((elapsed / duration) * 100));
+                counter.innerText = String(count).padStart(3, '0');
+                bar.style.width = count + "%";
+
+                if (count < 100) {
+                    requestAnimationFrame(updateLoader);
+                } else {
+                    clearInterval(wordInterval);
+                    setTimeout(() => {
+                        loader.style.transform = "translateY(-100%)";
+                        initGSAPHero();
+                    }, 400);
+                }
+            }
+            requestAnimationFrame(updateLoader);
+        });
+
+        // HLS Video Initialization
+        const videoUrl = "https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8";
+        const heroVid = document.getElementById('hero-video');
+
+        if (Hls.isSupported()) {
+            const hls = new Hls(); hls.loadSource(videoUrl); hls.attachMedia(heroVid);
+        } else if (heroVid.canPlayType('application/vnd.apple.mpegurl')) {
+            heroVid.src = videoUrl;
+        }
+
+        // GSAP Logic
+        function initGSAPHero() {
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+            tl.to(".name-reveal", { opacity: 1, y: 0, duration: 1.2 }, 0.1)
+                .to(".blur-in", { opacity: 1, filter: "blur(0px)", y: 0, duration: 1, stagger: 0.1 }, 0.3);
+        }
+
+        const roles = ["Software Developer", "Backend Engineer", "System Architect", "IoT Enthusiast"];
+        let roleCurrent = 0;
+        const roleText = document.getElementById('role-text');
+        setInterval(() => {
+            roleCurrent = (roleCurrent + 1) % roles.length;
+            roleText.classList.remove('animate-role');
+            void roleText.offsetWidth;
+            roleText.innerText = roles[roleCurrent];
+            roleText.classList.add('animate-role');
+        }, 2000);
+
+        gsap.registerPlugin(ScrollTrigger);
+
+        window.addEventListener("scroll", () => {
+            const nav = document.getElementById("nav-pill");
+            nav.classList.toggle("shadow-[0_10px_30px_rgba(0,0,0,0.5)]", window.scrollY > 100);
+        });
+
+        // Parallax
+        gsap.to(".parallax-col-1", {
+            y: -600,
+            scrollTrigger: { trigger: "#explorations", start: "top bottom", end: "bottom top", scrub: 1 }
+        });
+        gsap.to(".parallax-col-2", {
+            y: -900,
+            scrollTrigger: { trigger: "#explorations", start: "top bottom", end: "bottom top", scrub: 1.5 }
+        });
+
+        // Modals
+        const projectDatabase = {
+            iot: {
+                title: "IoT Radar <span class='font-display italic'>Automation</span>", tag: "HARDWARE / C++",
+                img: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1000&q=80",
+                desc: "Designed and built an IoT-driven ultrasonic radar and smart water tank system. Powered by ESP8266 and Blynk, it automates hardware states based on real-time distance sensor telemetry.", live: "#", repo: "#"
+            },
+            kambala: {
+                title: "KAMBALA <span class='font-display italic'>GUI & RMS</span>", tag: "FINTECH API",
+                img: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1000&q=80",
+                desc: "Automated fintech trading system utilizing Noren API integrations. Built a comprehensive Risk Management System (RMS) to validate SL-LMT orders, clamp price ranges, and handle partial order fills.", live: "#", repo: "#"
+            },
+            scheduler: {
+                title: "Distributed <span class='font-display italic'>Scheduler</span>", tag: "BACKEND ARCHITECTURE",
+                img: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1000&q=80",
+                desc: "Production-grade microservice architecture project featuring a distributed task scheduler with robust leader election, failure handling, and dead-letter queue retries.", live: "#", repo: "#"
+            },
+            reward: {
+                title: "RewardSync <span class='font-display italic'>POS</span>", tag: "SYSTEMS",
+                img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1000&q=80",
+                desc: "A real-time loyalty point-of-sale integration designed to provide sub-second transactional feedback and instant point ledger credits directly at the retail counter.", live: "#", repo: "#"
+            },
+            tata: {
+                title: "TATA Retail <span class='font-display italic'>Analytics</span>", tag: "FULLSTACK / MERN",
+                img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1000&q=80",
+                desc: "Streamlit-based dashboard for monitoring retail revenue and AI-driven customer segmentation. Built custom UI cloning, navbar styling, and advanced navigation logic.", live: "#", repo: "#"
+            }
+        };
+        const modal = document.getElementById('project-modal');
+        const panel = document.getElementById('modal-panel');
+        function openModal(id) {
+            const data = projectDatabase[id]; if (!data) return;
+            document.getElementById('modal-title').innerHTML = data.title; document.getElementById('modal-tag').innerText = data.tag;
+            document.getElementById('modal-img').src = data.img; document.getElementById('modal-desc').innerHTML = data.desc;
+            document.getElementById('modal-live').href = data.live; document.getElementById('modal-repo').href = data.repo;
+            document.body.style.overflow = 'hidden';
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+            setTimeout(() => { modal.classList.remove('opacity-0'); panel.classList.remove('scale-95'); }, 10);
+        }
+        function closeModal() {
+            modal.classList.add('opacity-0'); panel.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); document.body.style.overflow = ''; }, 300);
+        }
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
+
+        // "Next Layer" Intersection Observer for Entrance Animation
+        const nlObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // The fix: wait a tiny bit to ensure the section is fully in viewport before triggering animation
+                    setTimeout(() => {
+                        entry.target.classList.add('in-view');
+                    }, 150);
+                    nlObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        nlObserver.observe(document.getElementById('contact'));
+    </script>
+</body>
+
+</html>
